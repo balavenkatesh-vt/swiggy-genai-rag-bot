@@ -1,0 +1,15 @@
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# Python Cache
+__pycache__/
+*.pyc
+
+# Vector Database (Local Data)
+chroma_db_swiggy/
+
+# Environment Variables & Secrets
+.env
+.streamlit/secrets.toml
