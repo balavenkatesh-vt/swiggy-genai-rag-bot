@@ -17,7 +17,7 @@ st.title("🍔 Swiggy GenAI Support Assistant")
 st.caption("Powered by RAG, LangChain & Groq Llama 3")
 
 # 1. Setup API Key & Vector DB Resources
-# Groq API Key-ஐ Streamlit Secrets அல்லது Environment Variable-ல் இருந்து எடுத்தல்
+# API Key-ஐ Environment Variable அல்லது Streamlit Secrets-ல் இருந்து பாதுகாப்பாக எடுத்தல்
 api_key = os.getenv("GROQ_API_KEY") or st.secrets.get("GROQ_API_KEY", "")
 os.environ["GROQ_API_KEY"] = api_key
 
@@ -38,9 +38,12 @@ vector_db, llm = load_rag_pipeline()
 
 # System Prompt
 system_prompt = """
-You are a helpful and polite customer support AI assistant for Swiggy.
-Use ONLY the provided policy context to answer the user's question. 
-If the information is not present in the context, politely inform the user that you don't have that specific detail in Swiggy policy guidelines.
+You are a helpful customer support AI assistant for Swiggy.
+Use the provided policy context to answer the user's question clearly. 
+
+If the user asks a general question like 'when will I get my refund', explain the refund timelines based on payment methods available in the context (UPI: 5-7 days, Swiggy Wallet: 2 hours, COD: 24 hours).
+
+If the information is completely missing from context, politely say you don't have that detail in Swiggy policy guidelines.
 
 Context:
 {context}
@@ -85,7 +88,7 @@ if user_question := st.chat_input("Ask about Swiggy policies..."):
     with st.chat_message("assistant"):
         with st.spinner("Searching Swiggy Knowledge Base..."):
             # Context Retrieval using Reformulated Query
-            docs = vector_db.similarity_search(search_query, k=3)
+            docs = vector_db.similarity_search(search_query, k=5)
             context_text = "\n\n".join([doc.page_content for doc in docs])
             
             # Format Prompt
