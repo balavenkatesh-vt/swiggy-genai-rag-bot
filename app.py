@@ -17,7 +17,9 @@ st.title("🍔 Swiggy GenAI Support Assistant")
 st.caption("Powered by RAG, LangChain & Groq Llama 3")
 
 # 1. Setup API Key & Vector DB Resources
-os.environ["GROQ_API_KEY"] = "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"
+# Groq API Key-ஐ Streamlit Secrets அல்லது Environment Variable-ல் இருந்து எடுத்தல்
+api_key = os.getenv("GROQ_API_KEY") or st.secrets.get("GROQ_API_KEY", "")
+os.environ["GROQ_API_KEY"] = api_key
 
 @st.cache_resource
 def load_rag_pipeline():
